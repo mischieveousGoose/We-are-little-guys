@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerMerger : MonoBehaviour
@@ -6,8 +7,14 @@ public class PlayerMerger : MonoBehaviour
     public float senseRange;
     public int size = 1;
     public LayerMask groundLayer;
-
-
+    public ParticleSystem mergeParticles;
+    SFXPlayer sfxPlayer;
+    public GameObject notEnoughRoomText;
+    public Vector2 wallCheckSize;
+    void Start()
+    {
+        sfxPlayer = FindFirstObjectByType<SFXPlayer>();
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
@@ -15,6 +22,13 @@ public class PlayerMerger : MonoBehaviour
             Dude dude = GetNearbyDude();
             if (dude != null) Merge(dude);
         }
+    }
+
+    IEnumerator NotEnoughRoomCoroutine()
+    {
+        notEnoughRoomText.SetActive(true);
+        yield return new WaitForSecondsRealtime(2);
+        notEnoughRoomText.SetActive(false);
     }
 
     public void ChangeSize(int change)
@@ -25,25 +39,37 @@ public class PlayerMerger : MonoBehaviour
 
         size += change;
         transform.localScale = Vector3.one * size;
+        sfxPlayer.PlaySFX(2);
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.aliceBlue;
+        Vector2 realSize = GetRealSize(size);
+        Vector2 newSize = GetRealSize(size + 2);
+        Vector2 point = transform.position + new Vector3(0, realSize.y / 2, 0f) + (Vector3.up * 0.1f);
+        Gizmos.DrawWireCube(point, newSize * wallCheckSize);
     }
 
     void Merge(Dude dude)
     {
         Vector2 realSize = GetRealSize(size);
-        Vector2 newSize = GetRealSize(size + 1);
+        Vector2 newSize = GetRealSize(size + 2);
         Vector2 point = transform.position + new Vector3(0, realSize.y / 2, 0f) + (Vector3.up * 0.1f);
 
 
-        if (!Physics2D.OverlapBox(point, newSize, 0f, groundLayer))
+        if (!Physics2D.OverlapBox(point, newSize * wallCheckSize, 0f, groundLayer))
         {
             size += 1;
             transform.position = point;
             transform.localScale = GetRealSize(size);
             Destroy(dude.gameObject);
+            mergeParticles.Play();
+            sfxPlayer.PlaySFX(2);
         }
         else
         {
-            Debug.Log("not enough room to merge");
+            StartCoroutine(NotEnoughRoomCoroutine());
         }
 
     }

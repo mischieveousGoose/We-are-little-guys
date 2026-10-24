@@ -8,6 +8,9 @@ public class Goal : MonoBehaviour
     public Transform dudeCheck;
     public Vector2 checkSize;
     public int size;
+    SpriteRenderer sr;
+    public Sprite noSprite, yesSprite;
+
 
     public bool isComplete;
 
@@ -39,6 +42,7 @@ public class Goal : MonoBehaviour
 
     void Start()
     {
+        sr = GetComponent<SpriteRenderer>();
         Vector3 newSize = Vector3.one * size;
         newSize.z = 1;
         transform.localScale = newSize;
@@ -48,6 +52,7 @@ public class Goal : MonoBehaviour
     void Update()
     {
         isComplete = GetCompletion();
+        sr.sprite = isComplete ? yesSprite : noSprite;
     }
 
     void OnDrawGizmos()
