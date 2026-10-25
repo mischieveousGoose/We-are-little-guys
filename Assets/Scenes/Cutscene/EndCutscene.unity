@@ -927,9 +927,13 @@ MonoBehaviour:
     text: NOOOOOOOOOOOOOOOOOO!
   nextScene: Menu
   alienParticles: {fileID: 1720907601}
+  isLevelDialogue: 0
+  hasDialogue: 1
   face: {fileID: 1421031865}
   nameText: {fileID: 645387151}
   dialogueText: {fileID: 246620854}
+  inDialogue: 0
+  dialogueBox: {fileID: 0}
 --- !u!4 &1265013334
 Transform:
   m_ObjectHideFlags: 0

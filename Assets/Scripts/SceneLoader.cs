@@ -9,6 +9,7 @@ public class SceneLoader : MonoBehaviour
     public void LoadScene(string sceneName)
     {
         StartCoroutine(LoadLevelCoroutine(sceneName));
+        SettingsManager.instance.didReset = false;
     }
 
     void Start()
@@ -25,7 +26,8 @@ public class SceneLoader : MonoBehaviour
 
     public void ReloadScene()
     {
+        SettingsManager.instance.didReset = true;
         string sceneName = SceneManager.GetActiveScene().name;
-        LoadScene(sceneName);
+        StartCoroutine(LoadLevelCoroutine(sceneName));
     }
 }

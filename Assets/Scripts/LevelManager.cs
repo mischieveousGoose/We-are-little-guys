@@ -9,9 +9,11 @@ public class LevelManager : MonoBehaviour
     bool paused;
     bool levelComplete;
     SFXPlayer sfxPlayer;
+    DialogueManager dialogueManager;
 
     void Start()
     {
+        dialogueManager = FindFirstObjectByType<DialogueManager>();
         winUI.SetActive(false);
         sfxPlayer = FindFirstObjectByType<SFXPlayer>();
     }
@@ -51,7 +53,7 @@ public class LevelManager : MonoBehaviour
 
     void ControlTime()
     {
-        if (levelComplete || paused)
+        if (levelComplete || paused || dialogueManager.inDialogue)
         {
             Time.timeScale = 0;
         }

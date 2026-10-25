@@ -13,15 +13,27 @@ public class DialogueManager : MonoBehaviour
     public string nextScene;
     AudioSource source;
     public ParticleSystem alienParticles;
+    public bool isLevelDialogue;
+    public bool hasDialogue;
 
     [Header("UI")]
     public Image face;
     public TMP_Text nameText;
     public TMP_Text dialogueText;
+    public bool inDialogue = false;
+
+    public GameObject dialogueBox;
 
 
     void Start()
     {
+
+        if (!hasDialogue) return;
+        if (isLevelDialogue && SettingsManager.instance.didReset) return;
+        if (isLevelDialogue) dialogueBox.SetActive(true);
+        else Time.timeScale = 1;
+
+
         source = GetComponent<AudioSource>();
         StartCoroutine(RunDialogue());
 
@@ -29,11 +41,16 @@ public class DialogueManager : MonoBehaviour
 
     public void EndDialogue()
     {
-        FindFirstObjectByType<SceneLoader>().LoadScene(nextScene);
+        inDialogue = false;
+        if (!isLevelDialogue)
+            FindFirstObjectByType<SceneLoader>().LoadScene(nextScene);
+        else
+            dialogueBox.SetActive(false);
     }
 
     IEnumerator RunDialogue()
     {
+        inDialogue = true;
         if (index == -1)
             yield return new WaitForSecondsRealtime(1f);
 
@@ -50,8 +67,12 @@ public class DialogueManager : MonoBehaviour
             }
             dialogueText.maxVisibleCharacters = 0;
             dialogueText.text = dialogue[index].text;
-            nameText.text = dialogue[index].cName;
-            face.sprite = dialogue[index].face;
+
+            if (!isLevelDialogue)
+            {
+                face.sprite = dialogue[index].face;
+                nameText.text = dialogue[index].cName;
+            }
             source.PlayOneShot(dialogue[index].voiceLine);
 
             while (dialogueText.maxVisibleCharacters < dialogue[index].text.Length)

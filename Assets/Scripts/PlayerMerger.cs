@@ -11,9 +11,11 @@ public class PlayerMerger : MonoBehaviour
     SFXPlayer sfxPlayer;
     public GameObject notEnoughRoomText;
     public Vector2 wallCheckSize;
+    CameraFollow cameraFollow;
     void Start()
     {
         sfxPlayer = FindFirstObjectByType<SFXPlayer>();
+        cameraFollow = FindFirstObjectByType<CameraFollow>();
     }
     void Update()
     {
@@ -36,6 +38,7 @@ public class PlayerMerger : MonoBehaviour
         if (size + change <= 0) return;
 
         transform.position += Vector3.up * (change * 0.5f);
+        cameraFollow.ScreenShake(0.1f, 0.6f);
 
         size += change;
         transform.localScale = Vector3.one * size;
@@ -66,6 +69,7 @@ public class PlayerMerger : MonoBehaviour
             Destroy(dude.gameObject);
             mergeParticles.Play();
             sfxPlayer.PlaySFX(2);
+            cameraFollow.ScreenShake(0.1f, 0.6f);
         }
         else
         {

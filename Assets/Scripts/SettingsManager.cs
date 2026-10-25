@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class SettingsManager : MonoBehaviour
 {
     public static SettingsManager instance;
+    public bool didReset = false;
 
     public float musicVolume = 1f;
     public float sfxVolume = 1f;

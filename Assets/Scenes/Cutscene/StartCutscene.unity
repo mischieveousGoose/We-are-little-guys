@@ -857,9 +857,14 @@ MonoBehaviour:
     voiceLine: {fileID: 8300000, guid: aae5301d535ffc34d91e80a27a66e2d0, type: 3}
     text: I wasn't planning on coming anyway to be honest.
   nextScene: 0
+  alienParticles: {fileID: 0}
+  isLevelDialogue: 0
+  hasDialogue: 1
   face: {fileID: 1421031865}
   nameText: {fileID: 645387151}
   dialogueText: {fileID: 246620854}
+  inDialogue: 0
+  dialogueBox: {fileID: 0}
 --- !u!4 &1265013334
 Transform:
   m_ObjectHideFlags: 0
